@@ -14,22 +14,6 @@ description = "Provides the deno executable"
 path = "lib.rs"
 
 
-
-[[test]]
-name = "integration"
-path = "integration_tests_runner.rs"
-harness = false
-
-[[bench]]
-name = "deno_bench"
-harness = false
-path = "./bench/main.rs"
-
-[[bench]]
-name = "lsp_bench_standalone"
-harness = false
-path = "./bench/lsp_bench_standalone.rs"
-
 [features]
 default = ["upgrade", "__vendored_zlib_ng"]
 # A feature that enables the upgrade subcommand and the background check for

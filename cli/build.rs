@@ -392,12 +392,7 @@ fn main() {
         .expect(
             "Missing symbols list! Generate using tools/napi/generate_symbols_lists.js",
         );
-
-    #[cfg(target_os = "windows")]
-    println!(
-        "cargo:rustc-link-arg-bin=deno=/DEF:{}",
-        symbols_path.display()
-    );
+    
 
     #[cfg(target_os = "macos")]
     println!(

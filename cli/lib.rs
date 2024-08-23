@@ -38,7 +38,6 @@ use crate::util::v8::get_v8_flags_from_env;
 use crate::util::v8::init_v8_flags;
 
 
-use deno_runtime::WorkerExecutionMode;
 pub use deno_runtime::UNSTABLE_GRANULAR_FLAGS;
 
 use deno_core::anyhow::Context;
@@ -48,13 +47,10 @@ use deno_core::futures::FutureExt;
 use deno_core::unsync::JoinHandle;
 use deno_npm::resolution::SnapshotFromLockfileError;
 use deno_runtime::fmt_errors::format_js_error;
-use deno_runtime::tokio_util::create_and_run_current_thread_with_maybe_metrics;
 use deno_terminal::colors;
 use std::env;
 use std::future::Future;
 use std::ops::Deref;
-use std::path::PathBuf;
-use std::sync::Arc;
 
 /// Ensures that all subcommands return an i32 exit code and an [`AnyError`] error type.
 pub trait SubcommandOutput {

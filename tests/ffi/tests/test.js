@@ -24,7 +24,7 @@ const resourcesPre = Deno[Deno.internal].core.resources();
 
 // dlopen shouldn't panic
 assertThrows(() => {
-  Deno.dlopen("cli/src/main.rs", {});
+  Deno.dlopen("cli/src/lib", {});
 });
 
 assertThrows(

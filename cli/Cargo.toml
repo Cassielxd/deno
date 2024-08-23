@@ -13,13 +13,9 @@ description = "Provides the deno executable"
 
 [[bin]]
 name = "deno"
-path = "main.rs"
+path = "lib.rs"
 doc = false
 
-[[bin]]
-name = "denort"
-path = "mainrt.rs"
-doc = false
 
 [[test]]
 name = "integration"

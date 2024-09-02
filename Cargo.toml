@@ -3,37 +3,38 @@
 [workspace]
 resolver = "2"
 members = [
-  "bench_util",
-  "cli",
-  "cli/napi/sym",
-  "ext/broadcast_channel",
-  "ext/cache",
-  "ext/canvas",
-  "ext/console",
-  "ext/cron",
-  "ext/crypto",
-  "ext/fetch",
-  "ext/ffi",
-  "ext/fs",
-  "ext/http",
-  "ext/io",
-  "ext/kv",
-  "ext/napi",
-  "ext/net",
-  "ext/node",
-  "ext/node_resolver",
-  "ext/url",
-  "ext/web",
-  "ext/webgpu",
-  "ext/webidl",
-  "ext/websocket",
-  "ext/webstorage",
-  "runtime",
-  "runtime/permissions",
-  "tests",
-  "tests/ffi",
-  "tests/napi",
-  "tests/util/server",
+    "bench_util",
+    "cli",
+    "cli/napi/sym",
+    "ext/broadcast_channel",
+    "ext/cache",
+    "ext/canvas",
+    "ext/console",
+    "ext/cron",
+    "ext/crypto",
+    "ext/fetch",
+    "ext/ffi",
+    "ext/fs",
+    "ext/http",
+    "ext/fake_http",
+    "ext/io",
+    "ext/kv",
+    "ext/napi",
+    "ext/net",
+    "ext/node",
+    "ext/node_resolver",
+    "ext/url",
+    "ext/web",
+    "ext/webgpu",
+    "ext/webidl",
+    "ext/websocket",
+    "ext/webstorage",
+    "runtime",
+    "runtime/permissions",
+    "tests",
+    "tests/ffi",
+    "tests/napi",
+    "tests/util/server",
 ]
 exclude = ["tests/util/std/hash/_wasm"]
 
@@ -72,6 +73,7 @@ deno_fetch = { version = "0.190.0", path = "./ext/fetch" }
 deno_ffi = { version = "0.153.0", path = "./ext/ffi" }
 deno_fs = { version = "0.76.0", path = "./ext/fs" }
 deno_http = { version = "0.164.0", path = "./ext/http" }
+deno_fake_http = { version = "0.1.0", path = "./ext/fake_http" }
 deno_io = { version = "0.76.0", path = "./ext/io" }
 deno_kv = { version = "0.74.0", path = "./ext/kv" }
 deno_napi = { version = "0.97.0", path = "./ext/napi" }

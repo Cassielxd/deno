@@ -8,13 +8,12 @@ static CLI_SNAPSHOT: &[u8] =
 
 pub fn deno_isolate_init() -> Option<&'static [u8]> {
     debug!("Deno isolate init with snapshots.");
-    None
-    /*#[cfg(not(feature = "hmr"))]
+    #[cfg(not(feature = "hmr"))]
     {
-      Some(CLI_SNAPSHOT)
+        Some(CLI_SNAPSHOT)
     }
     #[cfg(feature = "hmr")]
     {
-      None
-    }*/
+        None
+    }
 }

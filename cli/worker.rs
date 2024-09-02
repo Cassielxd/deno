@@ -42,7 +42,7 @@ use deno_terminal::colors;
 use node_resolver::NodeResolution;
 use node_resolver::NodeResolutionMode;
 use tokio::select;
-
+use deno_fake_http::HttpReceiver;
 use crate::args::CliLockfile;
 use crate::args::DenoSubcommand;
 use crate::args::StorageKeyResolver;
@@ -116,6 +116,7 @@ pub struct CliMainWorkerOptions {
     pub skip_op_registration: bool,
     pub create_hmr_runner: Option<CreateHmrRunnerCb>,
     pub create_coverage_collector: Option<CreateCoverageCollectorCb>,
+    pub fake_http_recever: Option<HttpReceiver>,
 }
 
 struct SharedWorkerState {
@@ -633,6 +634,7 @@ impl CliMainWorkerFactory {
             origin_storage_dir,
             blob_store: shared.blob_store.clone(),
             broadcast_channel: shared.broadcast_channel.clone(),
+            fake_http_recever: shared.options.fake_http_recever.clone(),
             shared_array_buffer_store: Some(shared.shared_array_buffer_store.clone()),
             compiled_wasm_module_store: Some(
                 shared.compiled_wasm_module_store.clone(),

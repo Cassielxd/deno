@@ -19,6 +19,7 @@
     "ext:deno_fs/30_fs.js": "../ext/fs/30_fs.js",
     "ext:deno_http/00_serve.ts": "../ext/http/00_serve.ts",
     "ext:deno_http/01_http.js": "../ext/http/01_http.js",
+    "ext:fake_http/01_fakehttp.js": "../ext/fake_http/01_fakehttp.js",
     "ext:deno_io/12_io.js": "../ext/io/12_io.js",
     "ext:deno_kv/01_db.ts": "../ext/kv/01_db.ts",
     "ext:deno_net/01_net.js": "../ext/net/01_net.js",

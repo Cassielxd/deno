@@ -30,6 +30,7 @@ pub mod version;
 pub mod worker;
 pub use deno_runtime;
 pub use deno_core;
+pub use deno_fake_http;
 use crate::args::flags_from_vec;
 use crate::args::DenoSubcommand;
 use crate::args::Flags;

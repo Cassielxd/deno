@@ -284,6 +284,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "async-channel"
+version = "2.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "89b47800b0be77592da0afd425cc03468052844aff33b84e33cc696f64e77b6a"
+dependencies = [
+ "concurrent-queue",
+ "event-listener-strategy",
+ "futures-core",
+ "pin-project-lite",
+]
+
+[[package]]
 name = "async-compression"
 version = "0.4.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -855,6 +867,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "concurrent-queue"
+version = "2.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4ca0197aee26d1ae37445ee532fefce43251d24cc7c166799f4d46817f1d3973"
+dependencies = [
+ "crossbeam-utils",
+]
+
+[[package]]
 name = "console_static_text"
 version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1144,121 +1165,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "deno"
-version = "1.46.1"
-dependencies = [
- "anstream",
- "async-trait",
- "base32",
- "base64 0.21.7",
- "bincode",
- "bytes",
- "cache_control",
- "chrono",
- "clap",
- "clap_complete",
- "clap_complete_fig",
- "color-print",
- "console_static_text",
- "dashmap",
- "data-encoding",
- "deno_ast",
- "deno_bench_util",
- "deno_cache_dir",
- "deno_config",
- "deno_core",
- "deno_doc",
- "deno_emit",
- "deno_graph",
- "deno_lint",
- "deno_lockfile",
- "deno_npm",
- "deno_package_json",
- "deno_runtime",
- "deno_semver",
- "deno_task_shell",
- "deno_terminal 0.2.0",
- "dissimilar",
- "dotenvy",
- "dprint-plugin-json",
- "dprint-plugin-jupyter",
- "dprint-plugin-markdown",
- "dprint-plugin-typescript",
- "env_logger",
- "eszip",
- "fancy-regex",
- "faster-hex",
- "flate2",
- "fs3",
- "glibc_version",
- "glob",
- "http 1.1.0",
- "http-body 1.0.0",
- "http-body-util",
- "hyper-util",
- "import_map",
- "indexmap",
- "jsonc-parser",
- "junction",
- "lazy-regex",
- "libc",
- "libsui",
- "libz-sys",
- "log",
- "lsp-types",
- "malva",
- "markup_fmt",
- "memmem",
- "monch",
- "napi_sym",
- "nix 0.26.2",
- "node_resolver",
- "notify",
- "once_cell",
- "open",
- "p256",
- "pathdiff",
- "percent-encoding",
- "phf 0.11.2",
- "pretty_assertions",
- "pretty_yaml",
- "quick-junit",
- "rand",
- "regex",
- "ring",
- "runtimelib",
- "rustyline",
- "rustyline-derive",
- "serde",
- "serde_json",
- "serde_repr",
- "sha2",
- "shell-escape",
- "spki",
- "strsim",
- "tar",
- "tempfile",
- "test_server",
- "text-size",
- "text_lines",
- "thiserror",
- "tokio",
- "tokio-util",
- "tower-lsp",
- "tracing",
- "twox-hash",
- "typed-arena",
- "uuid",
- "walkdir",
- "which 4.4.2",
- "winapi",
- "winres",
- "zeromq",
- "zip",
- "zstd",
-]
-
-[[package]]
 name = "deno_ast"
 version = "0.41.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1514,6 +1420,44 @@ dependencies = [
  "import_map",
  "parking_lot 0.11.2",
  "url",
+]
+
+[[package]]
+name = "deno_fake_http"
+version = "0.1.0"
+dependencies = [
+ "async-channel",
+ "async-compression",
+ "async-trait",
+ "base64 0.21.7",
+ "bencher",
+ "brotli",
+ "bytes",
+ "cache_control",
+ "deno_core",
+ "flate2",
+ "http 0.2.12",
+ "http 1.1.0",
+ "http-body-util",
+ "httparse",
+ "hyper 0.14.28",
+ "hyper 1.4.1",
+ "hyper-util",
+ "itertools 0.10.5",
+ "memmem",
+ "mime",
+ "once_cell",
+ "percent-encoding",
+ "phf 0.11.2",
+ "pin-project",
+ "rand",
+ "ring",
+ "scopeguard",
+ "serde",
+ "smallvec",
+ "thiserror",
+ "tokio",
+ "tokio-util",
 ]
 
 [[package]]
@@ -1944,6 +1888,7 @@ dependencies = [
  "deno_core",
  "deno_cron",
  "deno_crypto",
+ "deno_fake_http",
  "deno_fetch",
  "deno_ffi",
  "deno_fs",
@@ -2023,6 +1968,122 @@ dependencies = [
  "thiserror",
  "tokio",
  "tokio-util",
+]
+
+[[package]]
+name = "deno_tauri"
+version = "1.46.1"
+dependencies = [
+ "anstream",
+ "async-trait",
+ "base32",
+ "base64 0.21.7",
+ "bincode",
+ "bytes",
+ "cache_control",
+ "chrono",
+ "clap",
+ "clap_complete",
+ "clap_complete_fig",
+ "color-print",
+ "console_static_text",
+ "dashmap",
+ "data-encoding",
+ "deno_ast",
+ "deno_bench_util",
+ "deno_cache_dir",
+ "deno_config",
+ "deno_core",
+ "deno_doc",
+ "deno_emit",
+ "deno_fake_http",
+ "deno_graph",
+ "deno_lint",
+ "deno_lockfile",
+ "deno_npm",
+ "deno_package_json",
+ "deno_runtime",
+ "deno_semver",
+ "deno_task_shell",
+ "deno_terminal 0.2.0",
+ "dissimilar",
+ "dotenvy",
+ "dprint-plugin-json",
+ "dprint-plugin-jupyter",
+ "dprint-plugin-markdown",
+ "dprint-plugin-typescript",
+ "env_logger",
+ "eszip",
+ "fancy-regex",
+ "faster-hex",
+ "flate2",
+ "fs3",
+ "glibc_version",
+ "glob",
+ "http 1.1.0",
+ "http-body 1.0.0",
+ "http-body-util",
+ "hyper-util",
+ "import_map",
+ "indexmap",
+ "jsonc-parser",
+ "junction",
+ "lazy-regex",
+ "libc",
+ "libsui",
+ "libz-sys",
+ "log",
+ "lsp-types",
+ "malva",
+ "markup_fmt",
+ "memmem",
+ "monch",
+ "napi_sym",
+ "nix 0.26.2",
+ "node_resolver",
+ "notify",
+ "once_cell",
+ "open",
+ "p256",
+ "pathdiff",
+ "percent-encoding",
+ "phf 0.11.2",
+ "pretty_assertions",
+ "pretty_yaml",
+ "quick-junit",
+ "rand",
+ "regex",
+ "ring",
+ "runtimelib",
+ "rustyline",
+ "rustyline-derive",
+ "serde",
+ "serde_json",
+ "serde_repr",
+ "sha2",
+ "shell-escape",
+ "spki",
+ "strsim",
+ "tar",
+ "tempfile",
+ "test_server",
+ "text-size",
+ "text_lines",
+ "thiserror",
+ "tokio",
+ "tokio-util",
+ "tower-lsp",
+ "tracing",
+ "twox-hash",
+ "typed-arena",
+ "uuid",
+ "walkdir",
+ "which 4.4.2",
+ "winapi",
+ "winres",
+ "zeromq",
+ "zip",
+ "zstd",
 ]
 
 [[package]]
@@ -2799,6 +2860,27 @@ dependencies = [
  "sha2",
  "thiserror",
  "url",
+]
+
+[[package]]
+name = "event-listener"
+version = "5.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6032be9bd27023a771701cc49f9f053c751055f71efb2e0ae5c15809093675ba"
+dependencies = [
+ "concurrent-queue",
+ "parking",
+ "pin-project-lite",
+]
+
+[[package]]
+name = "event-listener-strategy"
+version = "0.5.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0f214dc438f977e6d4e3500aaa277f5ad94ca83fbbd9b1a15713ce2344ccc5a1"
+dependencies = [
+ "event-listener",
+ "pin-project-lite",
 ]
 
 [[package]]
@@ -4865,6 +4947,12 @@ dependencies = [
  "rand_core",
  "sha2",
 ]
+
+[[package]]
+name = "parking"
+version = "2.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bb813b8af86854136c6922af0598d719255ecb2179515e6e7730d468f05c9cae"
 
 [[package]]
 name = "parking_lot"

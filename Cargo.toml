@@ -39,10 +39,10 @@ members = [
 exclude = ["tests/util/std/hash/_wasm"]
 
 [workspace.package]
-authors = ["the Deno authors"]
+authors = ["cassie 34840933@qq.com"]
 edition = "2021"
 license = "MIT"
-repository = "https://github.com/denoland/deno"
+repository = "https://github.com/Cassielxd/deno"
 
 [workspace.dependencies]
 deno_ast = { version = "=0.41.2", features = ["transpiling"] }

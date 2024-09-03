@@ -3356,7 +3356,7 @@ https://github.com/denoland/deno_install
 - fix(lsp): restart TS language service when caching dependencies (#14979)
 - fix(modules): immediately resolve follow-up dyn imports to a dyn imported
   module (#14958)
-- fix(runtime): derive default for deno_runtime::ExitCode (#15017)
+- fix(runtime): derive default for deno_runtime_tauri::ExitCode (#15017)
 - fix(task): remove --no-config as task subcommand argument (#14983)
 - fix(test): typo ('finsihed') if text decoder not closed during test (#14996)
 - fix(vendor): ignore import map in output directory instead of erroring

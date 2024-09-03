@@ -1877,7 +1877,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "deno_runtime"
+name = "deno_runtime_tauri"
 version = "0.175.0"
 dependencies = [
  "deno_ast",
@@ -2002,7 +2002,7 @@ dependencies = [
  "deno_lockfile",
  "deno_npm",
  "deno_package_json",
- "deno_runtime",
+ "deno_runtime_tauri",
  "deno_semver",
  "deno_task_shell",
  "deno_terminal 0.2.0",

@@ -25,15 +25,15 @@ use deno_core::RequestedModuleType;
 use deno_core::ResolutionKind;
 use deno_npm::npm_rc::ResolvedNpmRc;
 use deno_package_json::PackageJsonDepValue;
-use deno_runtime::deno_fs;
-use deno_runtime::deno_node::create_host_defined_options;
-use deno_runtime::deno_node::NodeResolver;
-use deno_runtime::deno_permissions::Permissions;
-use deno_runtime::deno_permissions::PermissionsContainer;
-use deno_runtime::deno_tls::rustls::RootCertStore;
-use deno_runtime::deno_tls::RootCertStoreProvider;
-use deno_runtime::WorkerExecutionMode;
-use deno_runtime::WorkerLogLevel;
+use deno_runtime_tauri::deno_fs;
+use deno_runtime_tauri::deno_node::create_host_defined_options;
+use deno_runtime_tauri::deno_node::NodeResolver;
+use deno_runtime_tauri::deno_permissions::Permissions;
+use deno_runtime_tauri::deno_permissions::PermissionsContainer;
+use deno_runtime_tauri::deno_tls::rustls::RootCertStore;
+use deno_runtime_tauri::deno_tls::RootCertStoreProvider;
+use deno_runtime_tauri::WorkerExecutionMode;
+use deno_runtime_tauri::WorkerLogLevel;
 use deno_semver::npm::NpmPackageReqReference;
 use eszip::EszipRelativeFileBaseUrl;
 use import_map::parse_from_json;
@@ -570,7 +570,7 @@ pub async fn run(
 
     let has_node_modules_dir = npm_resolver.root_node_modules_path().is_some();
     let node_resolver = Arc::new(NodeResolver::new(
-        deno_runtime::deno_node::DenoFsNodeResolverEnv::new(fs.clone()),
+        deno_runtime_tauri::deno_node::DenoFsNodeResolverEnv::new(fs.clone()),
         npm_resolver.clone().into_npm_resolver(),
     ));
     let cjs_resolutions = Arc::new(CjsResolutionStore::default());
@@ -580,7 +580,7 @@ pub async fn run(
         CliCjsCodeAnalyzer::new(node_analysis_cache, fs.clone());
     let node_code_translator = Arc::new(NodeCodeTranslator::new(
         cjs_esm_code_analyzer,
-        deno_runtime::deno_node::DenoFsNodeResolverEnv::new(fs.clone()),
+        deno_runtime_tauri::deno_node::DenoFsNodeResolverEnv::new(fs.clone()),
         node_resolver.clone(),
         npm_resolver.clone().into_npm_resolver(),
     ));

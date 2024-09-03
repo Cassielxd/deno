@@ -22,12 +22,12 @@ default = ["upgrade", "__vendored_zlib_ng"]
 upgrade = []
 # A dev feature to disable creations and loading of snapshots in favor of
 # loading JS sources at runtime.
-hmr = ["deno_runtime/hmr"]
+hmr = ["deno_runtime_tauri/hmr"]
 # Vendor zlib as zlib-ng
 __vendored_zlib_ng = ["flate2/zlib-ng-compat", "libz-sys/zlib-ng"]
 
 [build-dependencies]
-deno_runtime = { workspace = true, features = ["include_js_files_for_snapshotting", "only_snapshotted_js_sources"] }
+deno_runtime_tauri = { workspace = true, features = ["include_js_files_for_snapshotting", "only_snapshotted_js_sources"] }
 deno_core = { workspace = true, features = ["include_js_files_for_snapshotting"] }
 lazy-regex.workspace = true
 serde.workspace = true
@@ -53,7 +53,7 @@ deno_lint = { version = "=0.63.1", features = ["docs"] }
 deno_lockfile.workspace = true
 deno_npm = "=0.23.1"
 deno_package_json.workspace = true
-deno_runtime = { workspace = true, features = ["include_js_files_for_snapshotting"] }
+deno_runtime_tauri = { workspace = true, features = ["include_js_files_for_snapshotting"] }
 deno_semver = "=0.5.10"
 deno_task_shell = "=0.17.0"
 deno_terminal.workspace = true

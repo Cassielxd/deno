@@ -28,7 +28,7 @@ pub mod tsc;
 pub mod util;
 pub mod version;
 pub mod worker;
-pub use deno_runtime;
+pub use deno_runtime_tauri;
 pub use deno_core;
 pub use deno_fake_http;
 use crate::args::flags_from_vec;
@@ -40,7 +40,7 @@ use crate::util::v8::get_v8_flags_from_env;
 use crate::util::v8::init_v8_flags;
 
 
-pub use deno_runtime::UNSTABLE_GRANULAR_FLAGS;
+pub use deno_runtime_tauri::UNSTABLE_GRANULAR_FLAGS;
 
 use deno_core::anyhow::Context;
 use deno_core::error::AnyError;
@@ -48,7 +48,7 @@ use deno_core::error::JsError;
 use deno_core::futures::FutureExt;
 use deno_core::unsync::JoinHandle;
 use deno_npm::resolution::SnapshotFromLockfileError;
-use deno_runtime::fmt_errors::format_js_error;
+use deno_runtime_tauri::fmt_errors::format_js_error;
 use deno_terminal::colors;
 use std::env;
 use std::future::Future;

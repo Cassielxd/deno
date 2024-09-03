@@ -23,11 +23,11 @@ use deno_core::resolve_url_or_path;
 use deno_core::serde_json;
 use deno_core::serde_json::json;
 use deno_core::url::Url;
-use deno_runtime::deno_io::Stdio;
-use deno_runtime::deno_io::StdioPipe;
-use deno_runtime::deno_permissions::Permissions;
-use deno_runtime::deno_permissions::PermissionsContainer;
-use deno_runtime::WorkerExecutionMode;
+use deno_runtime_tauri::deno_io::Stdio;
+use deno_runtime_tauri::deno_io::StdioPipe;
+use deno_runtime_tauri::deno_permissions::Permissions;
+use deno_runtime_tauri::deno_permissions::PermissionsContainer;
+use deno_runtime_tauri::WorkerExecutionMode;
 use deno_terminal::colors;
 use jupyter_runtime::jupyter::ConnectionInfo;
 use jupyter_runtime::messaging::StreamContent;
@@ -176,7 +176,7 @@ pub async fn kernel(
             startup_data_tx,
         )
             .boxed_local();
-        deno_runtime::tokio_util::create_and_run_current_thread(fut)
+        deno_runtime_tauri::tokio_util::create_and_run_current_thread(fut)
     });
 
     let Ok(startup_data) = startup_data_rx.await else {

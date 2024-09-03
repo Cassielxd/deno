@@ -18,25 +18,25 @@ use deno_core::ModuleId;
 use deno_core::ModuleLoader;
 use deno_core::PollEventLoopOptions;
 use deno_core::SharedArrayBufferStore;
-use deno_runtime::code_cache;
-use deno_runtime::deno_broadcast_channel::InMemoryBroadcastChannel;
-use deno_runtime::deno_fs;
-use deno_runtime::deno_node;
-use deno_runtime::deno_node::NodeExtInitServices;
-use deno_runtime::deno_node::NodeResolver;
-use deno_runtime::deno_permissions::PermissionsContainer;
-use deno_runtime::deno_tls::RootCertStoreProvider;
-use deno_runtime::deno_web::BlobStore;
-use deno_runtime::fmt_errors::format_js_error;
-use deno_runtime::inspector_server::InspectorServer;
-use deno_runtime::ops::worker_host::CreateWebWorkerCb;
-use deno_runtime::web_worker::WebWorker;
-use deno_runtime::web_worker::WebWorkerOptions;
-use deno_runtime::worker::MainWorker;
-use deno_runtime::worker::WorkerOptions;
-use deno_runtime::BootstrapOptions;
-use deno_runtime::WorkerExecutionMode;
-use deno_runtime::WorkerLogLevel;
+use deno_runtime_tauri::code_cache;
+use deno_runtime_tauri::deno_broadcast_channel::InMemoryBroadcastChannel;
+use deno_runtime_tauri::deno_fs;
+use deno_runtime_tauri::deno_node;
+use deno_runtime_tauri::deno_node::NodeExtInitServices;
+use deno_runtime_tauri::deno_node::NodeResolver;
+use deno_runtime_tauri::deno_permissions::PermissionsContainer;
+use deno_runtime_tauri::deno_tls::RootCertStoreProvider;
+use deno_runtime_tauri::deno_web::BlobStore;
+use deno_runtime_tauri::fmt_errors::format_js_error;
+use deno_runtime_tauri::inspector_server::InspectorServer;
+use deno_runtime_tauri::ops::worker_host::CreateWebWorkerCb;
+use deno_runtime_tauri::web_worker::WebWorker;
+use deno_runtime_tauri::web_worker::WebWorkerOptions;
+use deno_runtime_tauri::worker::MainWorker;
+use deno_runtime_tauri::worker::WorkerOptions;
+use deno_runtime_tauri::BootstrapOptions;
+use deno_runtime_tauri::WorkerExecutionMode;
+use deno_runtime_tauri::WorkerLogLevel;
 use deno_semver::npm::NpmPackageReqReference;
 use deno_terminal::colors;
 use node_resolver::NodeResolution;
@@ -496,7 +496,7 @@ impl CliMainWorkerFactory {
         main_module: ModuleSpecifier,
         permissions: PermissionsContainer,
         custom_extensions: Vec<Extension>,
-        stdio: deno_runtime::deno_io::Stdio,
+        stdio: deno_runtime_tauri::deno_io::Stdio,
     ) -> Result<CliMainWorker, AnyError> {
         let shared = &self.shared;
         let (main_module, is_main_cjs) = if let Ok(package_ref) =
@@ -744,7 +744,7 @@ impl CliMainWorkerFactory {
 
 fn create_web_worker_callback(
     shared: Arc<SharedWorkerState>,
-    stdio: deno_runtime::deno_io::Stdio,
+    stdio: deno_runtime_tauri::deno_io::Stdio,
 ) -> Arc<CreateWebWorkerCb> {
     Arc::new(move |args| {
         let maybe_inspector_server = shared.maybe_inspector_server.clone();
@@ -856,7 +856,7 @@ fn create_web_worker_callback(
 mod tests {
     use super::*;
     use deno_core::resolve_path;
-    use deno_runtime::deno_permissions::Permissions;
+    use deno_runtime_tauri::deno_permissions::Permissions;
 
     fn create_test_worker() -> MainWorker {
         let main_module =

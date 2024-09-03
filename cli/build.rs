@@ -4,7 +4,7 @@ use std::env;
 use std::path::PathBuf;
 
 use deno_core::snapshot::*;
-use deno_runtime::*;
+use deno_runtime_tauri::*;
 mod shared;
 
 mod ts {
@@ -13,7 +13,7 @@ mod ts {
     use deno_core::error::AnyError;
     use deno_core::op2;
     use deno_core::OpState;
-    use deno_runtime::deno_node::SUPPORTED_BUILTIN_NODE_MODULES;
+    use deno_runtime_tauri::deno_node::SUPPORTED_BUILTIN_NODE_MODULES;
     use serde::Serialize;
     use std::collections::HashMap;
     use std::io::Write;
@@ -328,7 +328,7 @@ mod ts {
 
 #[cfg(not(feature = "hmr"))]
 fn create_cli_snapshot(snapshot_path: PathBuf) {
-    use deno_runtime::ops::bootstrap::SnapshotOptions;
+    use deno_runtime_tauri::ops::bootstrap::SnapshotOptions;
 
     let snapshot_options = SnapshotOptions {
         ts_version: ts::version(),
@@ -336,7 +336,7 @@ fn create_cli_snapshot(snapshot_path: PathBuf) {
         target: std::env::var("TARGET").unwrap(),
     };
 
-    deno_runtime::snapshot::create_runtime_snapshot(
+    deno_runtime_tauri::snapshot::create_runtime_snapshot(
         snapshot_path,
         snapshot_options,
         vec![],
@@ -392,7 +392,7 @@ fn main() {
         .expect(
             "Missing symbols list! Generate using tools/napi/generate_symbols_lists.js",
         );
-    
+
 
     #[cfg(target_os = "macos")]
     println!(

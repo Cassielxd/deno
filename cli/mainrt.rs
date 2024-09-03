@@ -28,9 +28,9 @@ mod lib;
 use deno_core::error::generic_error;
 use deno_core::error::AnyError;
 use deno_core::error::JsError;
-use deno_runtime::fmt_errors::format_js_error;
-use deno_runtime::tokio_util::create_and_run_current_thread_with_maybe_metrics;
-pub use deno_runtime::UNSTABLE_GRANULAR_FLAGS;
+use deno_runtime_tauri::fmt_errors::format_js_error;
+use deno_runtime_tauri::tokio_util::create_and_run_current_thread_with_maybe_metrics;
+pub use deno_runtime_tauri::UNSTABLE_GRANULAR_FLAGS;
 use deno_terminal::colors;
 use indexmap::IndexMap;
 
@@ -84,7 +84,7 @@ fn load_env_vars(env_vars: &IndexMap<String, String>) {
 }
 
 fn main() {
-    deno_runtime::deno_permissions::mark_standalone();
+    deno_runtime_tauri::deno_permissions::mark_standalone();
     let args: Vec<_> = env::args_os().collect();
     let standalone = standalone::extract_standalone(Cow::Owned(args));
     let future = async move {

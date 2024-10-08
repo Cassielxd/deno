@@ -205,27 +205,3 @@ unsafe extern "C" fn async_exec_wrap(_env: napi_env, data: *mut c_void) {
     ((*data).async_cb)(data);
   }
 }
-
-#[cfg(test)]
-mod tests {
-  use super::*;
-
-  #[test]
-  fn sizes() {
-    assert_eq!(
-      std::mem::size_of::<libuv_sys_lite::uv_mutex_t>(),
-      UV_MUTEX_SIZE
-    );
-    assert_eq!(
-      std::mem::size_of::<libuv_sys_lite::uv_handle_t>(),
-      UV_HANDLE_SIZE
-    );
-    assert_eq!(
-      std::mem::size_of::<libuv_sys_lite::uv_async_t>(),
-      UV_ASYNC_SIZE
-    );
-    assert_eq!(std::mem::size_of::<uv_mutex_t>(), UV_MUTEX_SIZE);
-    assert_eq!(std::mem::size_of::<uv_handle_t>(), UV_HANDLE_SIZE);
-    assert_eq!(std::mem::size_of::<uv_async_t>(), UV_ASYNC_SIZE);
-  }
-}

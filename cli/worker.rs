@@ -122,25 +122,25 @@ pub struct CliMainWorkerOptions {
   pub serve_host: Option<String>,
 }
 
-struct SharedWorkerState {
-  blob_store: Arc<BlobStore>,
-  broadcast_channel: InMemoryBroadcastChannel,
-  code_cache: Option<Arc<dyn code_cache::CodeCache>>,
-  compiled_wasm_module_store: CompiledWasmModuleStore,
-  feature_checker: Arc<FeatureChecker>,
-  fs: Arc<dyn deno_fs::FileSystem>,
-  maybe_file_watcher_communicator: Option<Arc<WatcherCommunicator>>,
-  maybe_inspector_server: Option<Arc<InspectorServer>>,
-  maybe_lockfile: Option<Arc<CliLockfile>>,
-  module_loader_factory: Box<dyn ModuleLoaderFactory>,
-  node_resolver: Arc<NodeResolver>,
-  npm_resolver: Arc<dyn CliNpmResolver>,
-  root_cert_store_provider: Arc<dyn RootCertStoreProvider>,
-  root_permissions: PermissionsContainer,
-  shared_array_buffer_store: SharedArrayBufferStore,
-  storage_key_resolver: StorageKeyResolver,
-  options: CliMainWorkerOptions,
-  subcommand: DenoSubcommand,
+pub struct SharedWorkerState {
+  pub blob_store: Arc<BlobStore>,
+  pub broadcast_channel: InMemoryBroadcastChannel,
+  pub code_cache: Option<Arc<dyn code_cache::CodeCache>>,
+  pub compiled_wasm_module_store: CompiledWasmModuleStore,
+  pub feature_checker: Arc<FeatureChecker>,
+  pub fs: Arc<dyn deno_fs::FileSystem>,
+  pub maybe_file_watcher_communicator: Option<Arc<WatcherCommunicator>>,
+  pub maybe_inspector_server: Option<Arc<InspectorServer>>,
+  pub maybe_lockfile: Option<Arc<CliLockfile>>,
+  pub module_loader_factory: Box<dyn ModuleLoaderFactory>,
+  pub node_resolver: Arc<NodeResolver>,
+  pub npm_resolver: Arc<dyn CliNpmResolver>,
+  pub root_cert_store_provider: Arc<dyn RootCertStoreProvider>,
+  pub root_permissions: PermissionsContainer,
+  pub shared_array_buffer_store: SharedArrayBufferStore,
+  pub storage_key_resolver: StorageKeyResolver,
+  pub options: CliMainWorkerOptions,
+  pub subcommand: DenoSubcommand,
 }
 
 impl SharedWorkerState {
@@ -160,7 +160,7 @@ impl SharedWorkerState {
 pub struct CliMainWorker {
   main_module: ModuleSpecifier,
   is_main_cjs: bool,
-  worker: MainWorker,
+  pub worker: MainWorker,
   shared: Arc<SharedWorkerState>,
 }
 
@@ -415,7 +415,7 @@ impl CliMainWorker {
 
 #[derive(Clone)]
 pub struct CliMainWorkerFactory {
-  shared: Arc<SharedWorkerState>,
+  pub shared: Arc<SharedWorkerState>,
 }
 
 impl CliMainWorkerFactory {

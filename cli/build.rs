@@ -389,11 +389,6 @@ fn main() {
 
   println!("cargo:rustc-rerun-if-changed={}", symbols_path.display());
 
-  #[cfg(target_os = "windows")]
-  println!(
-    "cargo:rustc-link-arg-bin=deno=/DEF:{}",
-    symbols_path.display()
-  );
 
   #[cfg(target_os = "macos")]
   println!(
@@ -459,17 +454,6 @@ fn main() {
   {
     let cli_snapshot_path = o.join("CLI_SNAPSHOT.bin");
     create_cli_snapshot(cli_snapshot_path);
-  }
-
-  #[cfg(target_os = "windows")]
-  {
-    let mut res = winres::WindowsResource::new();
-    res.set_icon("deno.ico");
-    res.set_language(winapi::um::winnt::MAKELANGID(
-      winapi::um::winnt::LANG_ENGLISH,
-      winapi::um::winnt::SUBLANG_ENGLISH_US,
-    ));
-    res.compile().unwrap();
   }
 }
 

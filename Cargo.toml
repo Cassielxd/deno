@@ -16,6 +16,7 @@ members = [
   "ext/ffi",
   "ext/fs",
   "ext/http",
+  "ext/ipcs",
   "ext/io",
   "ext/kv",
   "ext/napi",
@@ -76,6 +77,7 @@ deno_fetch = { version = "0.194.0", path = "./ext/fetch" }
 deno_ffi = { version = "0.157.0", path = "./ext/ffi" }
 deno_fs = { version = "0.80.0", path = "./ext/fs" }
 deno_http = { version = "0.168.0", path = "./ext/http" }
+deno_ipcs = { version = "0.3.0", path = "./ext/ipcs" }
 deno_io = { version = "0.80.0", path = "./ext/io" }
 deno_kv = { version = "0.78.0", path = "./ext/kv" }
 deno_napi = { version = "0.101.0", path = "./ext/napi" }

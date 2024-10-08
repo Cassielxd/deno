@@ -4,22 +4,14 @@
 name = "deno"
 version = "2.0.0-rc.10"
 authors.workspace = true
-default-run = "deno"
 edition.workspace = true
 exclude = ["bench/testdata/lsp_benchdata/"]
 license.workspace = true
 repository.workspace = true
 description = "Provides the deno executable"
-
-[[bin]]
-name = "deno"
-path = "main.rs"
-doc = false
-
-[[bin]]
-name = "denort"
-path = "mainrt.rs"
-doc = false
+[lib]
+name = "deno_lib"
+path = "lib.rs"
 
 [[test]]
 name = "integration"
@@ -65,6 +57,7 @@ winres.workspace = true
 [dependencies]
 deno_ast = { workspace = true, features = ["bundler", "cjs", "codegen", "proposal", "react", "sourcemap", "transforms", "typescript", "view", "visit"] }
 deno_cache_dir = { workspace = true }
+deno_ipcs = { workspace = true }
 deno_config = { version = "=0.37.1", features = ["workspace", "sync"] }
 deno_core = { workspace = true, features = ["include_js_files_for_snapshotting"] }
 deno_doc = { version = "0.150.1", features = ["html", "syntect"] }
@@ -177,13 +170,5 @@ nix.workspace = true
 
 [dev-dependencies]
 deno_bench_util.workspace = true
-libuv-sys-lite = "=1.48.2"
 pretty_assertions.workspace = true
 test_util.workspace = true
-
-[package.metadata.winres]
-# This section defines the metadata that appears in the deno.exe PE header.
-OriginalFilename = "deno.exe"
-LegalCopyright = "© Deno contributors & Deno Land Inc. MIT licensed."
-ProductName = "Deno"
-FileDescription = "Deno: A secure runtime for JavaScript and TypeScript"

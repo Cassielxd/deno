@@ -259,7 +259,7 @@ pub fn create_runtime_snapshot(
   // NOTE(bartlomieju): ordering is important here, keep it in sync with
   // `runtime/worker.rs`, `runtime/web_worker.rs` and `runtime/snapshot.rs`!
   let fs = std::sync::Arc::new(deno_fs::RealFs);
-  let (deno_sender, deno_receiver) = async_channel::unbounded::<IpcMessage>();
+  let (deno_sender, _deno_receiver) = async_channel::unbounded::<IpcMessage>();
   let events_manager = EventsManager::new();
   let mut extensions: Vec<Extension> = vec![
     deno_webidl::deno_webidl::init_ops_and_esm(),

@@ -52,6 +52,7 @@ deno_fetch.workspace = true
 deno_ffi.workspace = true
 deno_fs = { workspace = true, features = ["sync_fs"] }
 deno_http.workspace = true
+deno_ipc.workspace = true
 deno_io.workspace = true
 deno_net.workspace = true
 deno_node.workspace = true
@@ -83,6 +84,7 @@ deno_fetch.workspace = true
 deno_ffi.workspace = true
 deno_fs = { workspace = true, features = ["sync_fs"] }
 deno_http.workspace = true
+deno_ipc.workspace = true
 deno_io.workspace = true
 deno_kv.workspace = true
 deno_napi.workspace = true
@@ -99,7 +101,7 @@ deno_webidl.workspace = true
 deno_websocket.workspace = true
 deno_webstorage.workspace = true
 node_resolver = { workspace = true, features = ["sync"] }
-
+async-channel.workspace = true
 dlopen2.workspace = true
 encoding_rs.workspace = true
 fastwebsockets.workspace = true

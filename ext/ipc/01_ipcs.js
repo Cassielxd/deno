@@ -133,4 +133,7 @@ globalThis.IPcs = {
     sendToHost,
     IpcBroadcastChannel
 };
-globalThis.IpcBroadcastChannel = IpcBroadcastChannel;
+//globalThis.IpcBroadcastChannel = IpcBroadcastChannel;
+export {
+    IpcBroadcastChannel
+};

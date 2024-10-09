@@ -12,6 +12,9 @@ use deno_core::op2;
 use deno_core::FsModuleLoader;
 use deno_core::ModuleSpecifier;
 use deno_fs::RealFs;
+use deno_ipc::events_manager::EventsManager;
+use deno_ipc::IpcState;
+use deno_ipc::messages::IpcMessage;
 use deno_runtime::deno_permissions::PermissionsContainer;
 use deno_runtime::permissions::RuntimePermissionDescriptorParser;
 use deno_runtime::worker::MainWorker;
@@ -39,6 +42,8 @@ async fn main() -> Result<(), AnyError> {
   let fs = Arc::new(RealFs);
   let permission_desc_parser =
     Arc::new(RuntimePermissionDescriptorParser::new(fs.clone()));
+  let (deno_sender, deno_receiver) = async_channel::unbounded::<IpcMessage>();
+  let events_manager = EventsManager::new();
   let mut worker = MainWorker::bootstrap_from_options(
     main_module.clone(),
     WorkerServiceOptions {
@@ -54,6 +59,7 @@ async fn main() -> Result<(), AnyError> {
       compiled_wasm_module_store: Default::default(),
       v8_code_cache: Default::default(),
       fs,
+      ipc_state: Arc::new(IpcState {sender:deno_sender,events_manager}),
     },
     WorkerOptions {
       extensions: vec![hello_runtime::init_ops_and_esm()],

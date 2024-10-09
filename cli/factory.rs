@@ -79,6 +79,9 @@ use node_resolver::analyze::NodeCodeTranslator;
 use once_cell::sync::OnceCell;
 use std::future::Future;
 use std::sync::Arc;
+use deno_ipc::events_manager::EventsManager;
+use deno_ipc::{IpcSender, IpcState};
+use deno_ipc::messages::IpcMessage;
 
 struct CliRootCertStoreProvider {
   cell: OnceCell<RootCertStore>,
@@ -196,6 +199,7 @@ struct CliFactoryServices {
   feature_checker: Deferred<Arc<FeatureChecker>>,
   code_cache: Deferred<Arc<CodeCache>>,
   workspace_resolver: Deferred<Arc<WorkspaceResolver>>,
+  ipc_state: Deferred<Arc<IpcState>>,
 }
 
 pub struct CliFactory {
@@ -350,7 +354,26 @@ impl CliFactory {
   pub fn fs(&self) -> &Arc<dyn deno_fs::FileSystem> {
     self.services.fs.get_or_init(|| Arc::new(deno_fs::RealFs))
   }
-
+  pub async fn ipc_state_resolver_new(
+    &self,
+    deno_sender: IpcSender,
+    events_manager: EventsManager,
+  ){
+    self
+        .services.ipc_state.get_or_try_init(move || {
+      Ok(Arc::new(IpcState { sender: deno_sender, events_manager }))
+    }).expect("TODO: panic message");
+  }
+  pub async fn ipc_state_resolver(
+    &self,
+  ) -> Result<&Arc<IpcState>, AnyError> {
+    self
+        .services.ipc_state.get_or_try_init(||{
+      let (deno_sender, _deno_receiver) = async_channel::unbounded::<IpcMessage>();
+      let events_manager = EventsManager::new();
+       Ok(Arc::new(IpcState{sender:deno_sender,events_manager}))
+    })
+  }
   pub async fn npm_resolver(
     &self,
   ) -> Result<&Arc<dyn CliNpmResolver>, AnyError> {
@@ -784,6 +807,7 @@ impl CliFactory {
     let fs = self.fs();
     let cli_node_resolver = self.cli_node_resolver().await?;
     let cli_npm_resolver = self.npm_resolver().await?.clone();
+    let ipc_state = self.ipc_state_resolver().await?.clone();
     let maybe_file_watcher_communicator = if cli_options.has_hmr() {
       Some(self.watcher_communicator.clone().unwrap())
     } else {
@@ -830,6 +854,7 @@ impl CliFactory {
       StorageKeyResolver::from_options(cli_options),
       cli_options.sub_command().clone(),
       self.create_cli_main_worker_options()?,
+      ipc_state
     ))
   }
 

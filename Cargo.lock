@@ -1190,6 +1190,7 @@ name = "deno"
 version = "2.0.0-rc.10"
 dependencies = [
  "anstream",
+ "async-channel",
  "async-trait",
  "base64 0.21.7",
  "bincode",
@@ -1210,7 +1211,7 @@ dependencies = [
  "deno_core",
  "deno_doc",
  "deno_graph",
- "deno_ipcs",
+ "deno_ipc",
  "deno_lint",
  "deno_lockfile",
  "deno_npm",
@@ -1721,7 +1722,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "deno_ipcs"
+name = "deno_ipc"
 version = "0.3.0"
 dependencies = [
  "async-channel",
@@ -2030,6 +2031,7 @@ dependencies = [
 name = "deno_runtime"
 version = "0.179.0"
 dependencies = [
+ "async-channel",
  "deno_ast",
  "deno_broadcast_channel",
  "deno_cache",
@@ -2043,6 +2045,7 @@ dependencies = [
  "deno_fs",
  "deno_http",
  "deno_io",
+ "deno_ipc",
  "deno_kv",
  "deno_napi",
  "deno_net",

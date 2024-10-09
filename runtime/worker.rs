@@ -43,7 +43,7 @@ use deno_tls::RootCertStoreProvider;
 use deno_tls::TlsKeys;
 use deno_web::BlobStore;
 use log::debug;
-
+use deno_ipc::IpcState;
 use crate::code_cache::CodeCache;
 use crate::code_cache::CodeCacheType;
 use crate::inspector_server::InspectorServer;
@@ -159,6 +159,8 @@ pub struct WorkerServiceOptions {
 
   /// V8 code cache for module and script source code.
   pub v8_code_cache: Option<Arc<dyn CodeCache>>,
+
+  pub ipc_state:Arc<IpcState>
 }
 
 pub struct WorkerOptions {
@@ -404,6 +406,7 @@ impl MainWorker {
       deno_cron::deno_cron::init_ops_and_esm(LocalCronHandler::new()),
       deno_napi::deno_napi::init_ops_and_esm::<PermissionsContainer>(),
       deno_http::deno_http::init_ops_and_esm::<DefaultHttpPropertyExtractor>(),
+      deno_ipc::deno_ipc::init_ops_and_esm(services.ipc_state),
       deno_io::deno_io::init_ops_and_esm(Some(options.stdio)),
       deno_fs::deno_fs::init_ops_and_esm::<PermissionsContainer>(
         services.fs.clone(),

@@ -17,6 +17,9 @@ use std::path::Path;
 use std::path::PathBuf;
 use std::rc::Rc;
 use std::sync::Arc;
+use deno_ipc::events_manager::EventsManager;
+use deno_ipc::IpcState;
+use deno_ipc::messages::IpcMessage;
 
 #[derive(Clone)]
 struct Permissions;
@@ -256,6 +259,8 @@ pub fn create_runtime_snapshot(
   // NOTE(bartlomieju): ordering is important here, keep it in sync with
   // `runtime/worker.rs`, `runtime/web_worker.rs` and `runtime/snapshot.rs`!
   let fs = std::sync::Arc::new(deno_fs::RealFs);
+  let (deno_sender, deno_receiver) = async_channel::unbounded::<IpcMessage>();
+  let events_manager = EventsManager::new();
   let mut extensions: Vec<Extension> = vec![
     deno_webidl::deno_webidl::init_ops_and_esm(),
     deno_console::deno_console::init_ops_and_esm(),
@@ -290,6 +295,7 @@ pub fn create_runtime_snapshot(
     ),
     deno_napi::deno_napi::init_ops_and_esm::<Permissions>(),
     deno_http::deno_http::init_ops_and_esm::<DefaultHttpPropertyExtractor>(),
+    deno_ipc::deno_ipc::init_ops_and_esm(Arc::new(IpcState{sender: deno_sender,events_manager})),
     deno_io::deno_io::init_ops_and_esm(Default::default()),
     deno_fs::deno_fs::init_ops_and_esm::<Permissions>(fs.clone()),
     deno_node::deno_node::init_ops_and_esm::<Permissions>(None, fs.clone()),

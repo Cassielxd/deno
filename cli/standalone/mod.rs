@@ -83,7 +83,9 @@ mod virtual_fs;
 pub use binary::extract_standalone;
 pub use binary::is_standalone_binary;
 pub use binary::DenoCompileBinaryWriter;
-
+use deno_ipc::events_manager::EventsManager;
+use deno_ipc::IpcState;
+use deno_ipc::messages::IpcMessage;
 use self::binary::load_npm_vfs;
 use self::binary::Metadata;
 use self::file_system::DenoCompileFileSystem;
@@ -694,6 +696,8 @@ pub async fn run(
     }
     checker
   });
+  let (deno_sender, deno_receiver) = async_channel::unbounded::<IpcMessage>();
+  let events_manager = EventsManager::new();
   let worker_factory = CliMainWorkerFactory::new(
     Arc::new(BlobStore::default()),
     // Code cache is not supported for standalone binary yet.
@@ -739,6 +743,7 @@ pub async fn run(
       serve_port: None,
       serve_host: None,
     },
+    Arc::new(IpcState {sender:deno_sender,events_manager})
   );
 
   // Initialize v8 once from the main thread.

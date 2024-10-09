@@ -414,13 +414,6 @@ fn main() {
       );
     }
   }
-
-  #[cfg(target_os = "android")]
-  println!(
-    "cargo:rustc-link-arg-bin=deno=-Wl,--export-dynamic-symbol-list={}",
-    symbols_path.display()
-  );
-
   // To debug snapshot issues uncomment:
   // op_fetch_asset::trace_serializer();
 

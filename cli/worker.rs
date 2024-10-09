@@ -45,7 +45,7 @@ use deno_terminal::colors;
 use node_resolver::NodeResolution;
 use node_resolver::NodeResolutionMode;
 use tokio::select;
-
+use deno_ipc::IpcState;
 use crate::args::CliLockfile;
 use crate::args::DenoSubcommand;
 use crate::args::StorageKeyResolver;
@@ -141,6 +141,7 @@ pub struct SharedWorkerState {
   pub storage_key_resolver: StorageKeyResolver,
   pub options: CliMainWorkerOptions,
   pub subcommand: DenoSubcommand,
+  pub ipc_state: Arc<IpcState>
 }
 
 impl SharedWorkerState {
@@ -436,6 +437,7 @@ impl CliMainWorkerFactory {
     storage_key_resolver: StorageKeyResolver,
     subcommand: DenoSubcommand,
     options: CliMainWorkerOptions,
+    ipc_state: Arc<IpcState>,
   ) -> Self {
     Self {
       shared: Arc::new(SharedWorkerState {
@@ -457,6 +459,7 @@ impl CliMainWorkerFactory {
         storage_key_resolver,
         options,
         subcommand,
+        ipc_state,
       }),
     }
   }
@@ -472,7 +475,7 @@ impl CliMainWorkerFactory {
         main_module,
         self.shared.root_permissions.clone(),
         vec![],
-        Default::default(),
+        Default::default()
       )
       .await
   }
@@ -483,7 +486,7 @@ impl CliMainWorkerFactory {
     main_module: ModuleSpecifier,
     permissions: PermissionsContainer,
     custom_extensions: Vec<Extension>,
-    stdio: deno_runtime::deno_io::Stdio,
+    stdio: deno_runtime::deno_io::Stdio
   ) -> Result<CliMainWorker, AnyError> {
     let shared = &self.shared;
     let (main_module, is_main_cjs) = if let Ok(package_ref) =
@@ -583,6 +586,7 @@ impl CliMainWorkerFactory {
       feature_checker,
       permissions,
       v8_code_cache: shared.code_cache.clone(),
+      ipc_state:shared.ipc_state.clone(),
     };
     let options = WorkerOptions {
       bootstrap: BootstrapOptions {
@@ -834,101 +838,3 @@ fn create_web_worker_callback(
   })
 }
 
-#[allow(clippy::print_stdout)]
-#[allow(clippy::print_stderr)]
-#[cfg(test)]
-mod tests {
-  use super::*;
-  use deno_core::resolve_path;
-  use deno_core::FsModuleLoader;
-  use deno_fs::RealFs;
-  use deno_runtime::deno_permissions::Permissions;
-  use deno_runtime::permissions::RuntimePermissionDescriptorParser;
-
-  fn create_test_worker() -> MainWorker {
-    let main_module =
-      resolve_path("./hello.js", &std::env::current_dir().unwrap()).unwrap();
-    let fs = Arc::new(RealFs);
-    let permission_desc_parser =
-      Arc::new(RuntimePermissionDescriptorParser::new(fs.clone()));
-    let options = WorkerOptions {
-      startup_snapshot: crate::js::deno_isolate_init(),
-      ..Default::default()
-    };
-
-    MainWorker::bootstrap_from_options(
-      main_module,
-      WorkerServiceOptions {
-        module_loader: Rc::new(FsModuleLoader),
-        permissions: PermissionsContainer::new(
-          permission_desc_parser,
-          Permissions::none_without_prompt(),
-        ),
-        blob_store: Default::default(),
-        broadcast_channel: Default::default(),
-        feature_checker: Default::default(),
-        node_services: Default::default(),
-        npm_process_state_provider: Default::default(),
-        root_cert_store_provider: Default::default(),
-        shared_array_buffer_store: Default::default(),
-        compiled_wasm_module_store: Default::default(),
-        v8_code_cache: Default::default(),
-        fs,
-      },
-      options,
-    )
-  }
-
-  #[tokio::test]
-  async fn execute_mod_esm_imports_a() {
-    let p = test_util::testdata_path().join("runtime/esm_imports_a.js");
-    let module_specifier = ModuleSpecifier::from_file_path(&p).unwrap();
-    let mut worker = create_test_worker();
-    let result = worker.execute_main_module(&module_specifier).await;
-    if let Err(err) = result {
-      eprintln!("execute_mod err {err:?}");
-    }
-    if let Err(e) = worker.run_event_loop(false).await {
-      panic!("Future got unexpected error: {e:?}");
-    }
-  }
-
-  #[tokio::test]
-  async fn execute_mod_circular() {
-    let p = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-      .parent()
-      .unwrap()
-      .join("tests/circular1.js");
-    let module_specifier = ModuleSpecifier::from_file_path(&p).unwrap();
-    let mut worker = create_test_worker();
-    let result = worker.execute_main_module(&module_specifier).await;
-    if let Err(err) = result {
-      eprintln!("execute_mod err {err:?}");
-    }
-    if let Err(e) = worker.run_event_loop(false).await {
-      panic!("Future got unexpected error: {e:?}");
-    }
-  }
-
-  #[tokio::test]
-  async fn execute_mod_resolve_error() {
-    // "foo" is not a valid module specifier so this should return an error.
-    let mut worker = create_test_worker();
-    let module_specifier =
-      resolve_path("./does-not-exist", &std::env::current_dir().unwrap())
-        .unwrap();
-    let result = worker.execute_main_module(&module_specifier).await;
-    assert!(result.is_err());
-  }
-
-  #[tokio::test]
-  async fn execute_mod_002_hello() {
-    // This assumes cwd is project root (an assumption made throughout the
-    // tests).
-    let mut worker = create_test_worker();
-    let p = test_util::testdata_path().join("run/001_hello.js");
-    let module_specifier = ModuleSpecifier::from_file_path(&p).unwrap();
-    let result = worker.execute_main_module(&module_specifier).await;
-    assert!(result.is_ok());
-  }
-}

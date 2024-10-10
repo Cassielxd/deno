@@ -59,11 +59,19 @@ impl EventsManager {
      * Send an event from Deno to Wry
      */
     pub async fn send(&self, name: String, content: serde_json::Value) -> Result<(), SendError<String>> {
-        let all_listeners = self.listeners.lock().await;
+        let mut all_listeners = self.listeners.lock().await;
         let listeners = all_listeners.get(&name);
+        let mut error_uids=Vec::new();
         if let Some(listeners) = listeners {
-            for listener in listeners.values() {
-                let _ = listener.send(content.clone()).await.unwrap();
+            for (uid,listener) in listeners.iter() {
+                if let Err(e)=listener.send(content.clone()).await{
+                    error_uids.push(uid.clone());
+                }
+            }
+        }
+        if !error_uids.is_empty(){
+            for uid in error_uids{
+                all_listeners.get_mut(&name).unwrap().remove(&uid);
             }
         }
         Ok(())

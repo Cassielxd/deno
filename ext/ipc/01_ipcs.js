@@ -18,12 +18,26 @@ import * as webidl from "ext:deno_webidl/00_webidl.js";
 
 const _name = Symbol("[[name]]");
 const _closed = Symbol("[[closed]]");
-async function sendToDeno(key, event, content) {
-    await send_to_deno({ id: key, event, content });
+
+function postMessage({key,event,message}) {
+    defer(() => {
+        send_to_host({
+            id: key?key:"ALL",
+            event: event,
+            content: message,
+        });
+    });
 }
-async function sendToHost(id, event, content) {
-    await send_to_host({ id, event, content });
+function emit({key,event,message}) {
+    defer(() => {
+        send_to_deno({
+            id: key?key:"ALL",
+            event: event,
+            content: message,
+        });
+    });
 }
+
 
 let channelMap = new Map();
 async function recv(key, ipc) {
@@ -55,6 +69,13 @@ function dispatch(source, name, data) {
         defer(go);
     }
 }
+
+
+function listen(name,fn){
+    let ipcBroadcastChannel = new IpcBroadcastChannel(name);
+    ipcBroadcastChannel.onmessage=fn;
+}
+
 class IpcBroadcastChannel extends EventTarget {
 
     [_name];
@@ -74,25 +95,6 @@ class IpcBroadcastChannel extends EventTarget {
      get name() {
         return this[_name];
       }
-
-    postToWindowMessage({key,name,message}) {
-        defer(() => {
-            send_to_host({
-                id: key?key:"ALL",
-                event: name?name:this.name,
-                content: message,
-            });
-        });
-    }
-    postMessage({key,name,message}) {
-        defer(() => {
-            send_to_deno({
-                id: key?key:"ALL",
-                event: name?name:this.name,
-                content: message,
-            });
-        });
-    }
     close() {
         channelMap.get(this.name).splice(channelMap.get(this.name).indexOf(this), 1);
         if (channelMap.get(this.name).length === 0) {
@@ -128,12 +130,13 @@ class IpcBroadcastChannel extends EventTarget {
 defineEventHandler(IpcBroadcastChannel.prototype, "message");
 defineEventHandler(IpcBroadcastChannel.prototype, "messageerror");
 const IpcBroadcastChannelPrototype = IpcBroadcastChannel.prototype;
-globalThis.IPcs = {
-    sendToDeno,
-    sendToHost,
-    IpcBroadcastChannel
-};
 //globalThis.IpcBroadcastChannel = IpcBroadcastChannel;
+const Ipcs={
+    IpcBroadcastChannel,
+    postMessage,
+    emit,
+    listen
+}
 export {
-    IpcBroadcastChannel
-};
+    Ipcs
+}

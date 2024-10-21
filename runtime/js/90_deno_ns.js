@@ -105,7 +105,7 @@ const denoNs = {
   Permissions: permissions.Permissions,
   PermissionStatus: permissions.PermissionStatus,
   serveHttp: http.serveHttp,
-  IpcBroadcastChannel:ipc.IpcBroadcastChannel,
+  Ipcs:ipc.Ipcs,
   serve: serve.serve,
   resolveDns: net.resolveDns,
   upgradeWebSocket: websocket.upgradeWebSocket,
